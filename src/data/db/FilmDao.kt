@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 interface FilmDao {
 
     suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResponse<Int>
-    suspend fun delete(id: Int)
+    suspend fun delete(id: Int): DbResponse<Unit?>
     suspend fun getById(id: Int): DbResponse<Film?>
     suspend fun getAll(): DbResponse<List<Film>>
 
@@ -33,8 +33,8 @@ class FilmDaoImpl() : FilmDao {
         }
     }
 
-    override suspend fun delete(id: Int) {
-        dbQuery { FilmEntity.findById(id)?.delete() }
+    override suspend fun delete(id: Int): DbResponse<Unit?> {
+        return dbQuery { FilmEntity.findById(id)?.delete() }
     }
 
     override suspend fun getById(id: Int): DbResponse<Film?> {

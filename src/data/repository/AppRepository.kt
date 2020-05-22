@@ -18,18 +18,16 @@ interface AppRepository {
 
     suspend fun insertFilm(title: String, director: String, durationTimeMillis: Long): Either<Failure, Int>
 
-    suspend fun deleteFilm(filmId: Int)
+    suspend fun deleteFilm(filmId: Int): Either<Failure, Unit?>
 
     //user
     suspend fun getAllUsers(): Either<Failure, List<User>>
-
-    suspend fun getAdminUsers(): Either<Failure, List<User>>
 
     suspend fun getUserById(userId: Int): Either<Failure, User?>
 
     suspend fun insertUser(name: String, surname: String, email: String, type: UserType): Either<Failure, Int>
 
-    suspend fun deleteUser(userId: Int)
+    suspend fun deleteUser(userId: Int): Either<Failure, Unit?>
 
     //order
     suspend fun insertOrder(userId: Int, filmId: Int): Either<Failure, Int>
@@ -38,7 +36,7 @@ interface AppRepository {
 
     suspend fun getOrderByFilm(filmId: Int): Either<Failure, List<Order>>
 
-    suspend fun deleteOrder(orderId: Int)
+    suspend fun deleteOrder(orderId: Int): Either<Failure, Unit?>
 
 }
 
@@ -61,16 +59,12 @@ class AppRepositoryImpl(
         return filmDao.insert(title, director, durationTimeMillis).toEither()
     }
 
-    override suspend fun deleteFilm(filmId: Int) {
-        filmDao.delete(filmId)
+    override suspend fun deleteFilm(filmId: Int): Either<Failure, Unit?> {
+        return filmDao.delete(filmId).toEither()
     }
 
     override suspend fun getAllUsers(): Either<Failure, List<User>> {
         return userDao.getAll().toEither()
-    }
-
-    override suspend fun getAdminUsers(): Either<Failure, List<User>> {
-        return userDao.getAll().toEither { it.filter { it.type == UserType.ADMIN } }
     }
 
     override suspend fun getUserById(userId: Int): Either<Failure, User?> {
@@ -86,8 +80,8 @@ class AppRepositoryImpl(
         return userDao.insert(name, surname, email, type).toEither { it }
     }
 
-    override suspend fun deleteUser(userId: Int) {
-        userDao.delete(userId)
+    override suspend fun deleteUser(userId: Int): Either<Failure, Unit?> {
+        return userDao.delete(userId).toEither()
     }
 
     override suspend fun insertOrder(userId: Int, filmId: Int): Either<Failure, Int> {
@@ -102,8 +96,8 @@ class AppRepositoryImpl(
         return orderDao.getOrdersByFilm(filmId).toEither()
     }
 
-    override suspend fun deleteOrder(orderId: Int) {
-        orderDao.delete(orderId)
+    override suspend fun deleteOrder(orderId: Int): Either<Failure, Unit?> {
+        return orderDao.delete(orderId).toEither()
     }
 
 

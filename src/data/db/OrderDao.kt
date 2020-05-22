@@ -11,7 +11,7 @@ interface OrderDao{
     suspend fun insert(userId: Int, filmId: Int): DbResponse<Int>
     suspend fun getOrdersByUser(userId: Int): DbResponse<List<Order>>
     suspend fun getOrdersByFilm(filmId : Int): DbResponse<List<Order>>
-    suspend fun delete(orderId: Int)
+    suspend fun delete(orderId: Int): DbResponse<Unit?>
 }
 
 
@@ -40,7 +40,6 @@ class OrderDaoImpl : OrderDao{
             UserEntity[userId].orders.toList().toOrders()
         }
 
-
     }
 
     override suspend fun getOrdersByFilm(filmId: Int): DbResponse<List<Order>> {
@@ -49,10 +48,9 @@ class OrderDaoImpl : OrderDao{
         }
     }
 
-    override suspend fun delete(orderId: Int) {
-        dbQuery {
+    override suspend fun delete(orderId: Int): DbResponse<Unit?> {
+       return  dbQuery {
             OrderEntity.findById(orderId)?.delete()
         }
     }
-
 }

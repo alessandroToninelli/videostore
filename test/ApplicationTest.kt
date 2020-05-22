@@ -31,7 +31,7 @@ class ApplicationTest {
             val repo = this.application.get<AppRepository>()
 
             runBlocking {
-                println(repo.getOrderByUser(3))
+               repo.deleteFilm(99)
             }
         }
     }

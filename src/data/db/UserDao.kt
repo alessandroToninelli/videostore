@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 interface UserDao {
 
     suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResponse<Int>
-    suspend fun delete(id: Int)
+    suspend fun delete(id: Int): DbResponse<Unit?>
     suspend fun getById(userId: Int): DbResponse<User?>
     suspend fun getAll(): DbResponse<List<User>>
 
@@ -39,8 +39,8 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun delete(id: Int) {
-        transaction {
+    override suspend fun delete(id: Int): DbResponse<Unit?> {
+        return dbQuery {
             UserEntity.findById(id)?.delete()
         }
     }

@@ -36,6 +36,10 @@ fun Application.routingModule() {
         exception<Failure.EmptyData> {
             call.respond(HttpStatusCode.NotFound)
         }
+
+        exception<Failure.TimeOutException> {
+            call.respond(HttpStatusCode.InternalServerError)
+        }
     }
 
     install(Locations)
@@ -56,7 +60,7 @@ fun Application.routingModule() {
 
         post<context.Film> {
             println(it.name)
-            println(call.receive<model.Film>())
+            println(call.receive<Film>())
         }
 
         get<context.Film> {
@@ -66,11 +70,11 @@ fun Application.routingModule() {
 
         get {
             val useCase = InsertFilmUseCase(repo)
-            exec(useCase, InsertFilmUseCase.Param("StarWars", "Lucas", 234000)).collect {
-                it.case(success = {}) }
-
-
-
+            exec(useCase, null).collect {
+                it.case(
+                    success = { it.data?.let { call.respond(it) } },
+                    error = {call.respondText { it.exception.msg }})
+            }
         }
 
 
