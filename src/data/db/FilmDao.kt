@@ -4,16 +4,16 @@ import model.Film
 import model.toFilm
 import model.toFilms
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
+import vo.DbResult
+import vo.dbQuery
 
 interface FilmDao {
 
-    suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResponse<Int>
-    suspend fun delete(id: Int): DbResponse<Unit?>
-    suspend fun getById(id: Int): DbResponse<Film?>
-    suspend fun getAll(): DbResponse<List<Film>>
+    suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResult<Int>
+    suspend fun delete(id: Int): DbResult<Boolean>
+    suspend fun getById(id: Int): DbResult<Film?>
+    suspend fun getAll(): DbResult<List<Film>>
 
 }
 
@@ -23,7 +23,7 @@ class FilmDaoImpl() : FilmDao {
         transaction { SchemaUtils.create(FilmTable) }
     }
 
-    override suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResponse<Int> {
+    override suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResult<Int> {
         return dbQuery {
             FilmEntity.new {
                 this.title = title
@@ -33,17 +33,17 @@ class FilmDaoImpl() : FilmDao {
         }
     }
 
-    override suspend fun delete(id: Int): DbResponse<Unit?> {
-        return dbQuery { FilmEntity.findById(id)?.delete() }
+    override suspend fun delete(id: Int): DbResult<Boolean> {
+        return dbQuery { FilmEntity.findById(id)?.delete() != null }
     }
 
-    override suspend fun getById(id: Int): DbResponse<Film?> {
+    override suspend fun getById(id: Int): DbResult<Film?> {
         return dbQuery {
             FilmEntity.findById(id)?.toFilm()
         }
     }
 
-    override suspend fun getAll(): DbResponse<List<Film>> {
+    override suspend fun getAll(): DbResult<List<Film>> {
         return dbQuery { FilmEntity.all().toList().toFilms() }
     }
 

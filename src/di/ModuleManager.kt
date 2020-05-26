@@ -1,5 +1,7 @@
 package di
 
+import business.service.AppService
+import business.usecase.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import context.AppSettings
@@ -12,6 +14,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.qualifier.named
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
+import org.koin.experimental.builder.factory
 import org.koin.experimental.builder.single
 import org.koin.experimental.builder.singleBy
 import javax.sql.DataSource
@@ -30,8 +33,28 @@ object ModuleManager : KoinComponent {
         singleBy<AppRepository, AppRepositoryImpl>()
     }
 
+    private val useCaseModule = module {
+        single<DeleteFilmUseCase>()
+        single<DeleteOrderUseCase>()
+        single<DeleteUserUseCase>()
+        single<GetAdminUsersUseCase>()
+        single<GetAllFilmsUseCase>()
+        single<GetAllUsersUseCase>()
+        single<GetFilmOrdersUseCase>()
+        single<GetFilmUseCase>()
+        single<GetUserOrdersUseCase>()
+        single<GetUserUseCase>()
+        single<InsertOrderUseCase>()
+        single<InsertFilmUseCase>()
+        single<InsertUserUseCase>()
+    }
+
+    private val serviceModule = module {
+        factory<AppService>()
+    }
+
     fun loadModules() {
-        loadKoinModules(listOf(dbModule, repoModule))
+        loadKoinModules(listOf(dbModule, repoModule, useCaseModule, serviceModule))
     }
 
   }

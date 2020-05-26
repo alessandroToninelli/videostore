@@ -1,12 +1,10 @@
 package vo
 
 
-import data.db.DbResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlin.math.log
 
 sealed class Either<out L, out R> {
 
@@ -29,6 +27,17 @@ sealed class Either<out L, out R> {
 
 
 }
+
+fun <L, R, newR> Either<L, R>.mapRight(transform: (R)->newR): Either<L,newR>{
+    var newValue : newR? = null
+    this.either({
+        newValue = null
+    },{
+        newValue = transform(it)
+    })
+    return newValue?.let { right(it) } ?: left(this.leftOrNull()!!)
+}
+
 
 fun <L> Either<L, Any?>.leftOrNull(): L? {
     var result: L? = null
@@ -73,33 +82,33 @@ fun <R> Flow<R>.either(action: (exception: Exception) -> Failure): Flow<Either<F
     }
 
 
-fun <T, R> DbResponse<T>.toEither(
+fun <T, R> DbResult<T>.toEither(
     onSuccess: (T) -> R,
     onError: ((Throwable) -> Failure)
 ): Either<Failure, R> {
     return when (this) {
-        is DbResponse.Success -> right(onSuccess(body))
-        is DbResponse.Error -> left(onError(exception))
+        is DbResult.Success -> right(onSuccess(body))
+        is DbResult.Error -> left(onError(exception))
     }
 }
 
-fun <T, R> DbResponse<T>.toEither(
+fun <T, R> DbResult<T>.toEither(
     onSuccess: (T) -> R
 ): Either<Failure, R> {
     return toEither(
         onSuccess,
         {
-            Failure.Error((this as DbResponse.Error).exception)
+            Failure.DbError((this as DbResult.Error).exception)
         })
 }
 
-fun <T> DbResponse<T>.toEither(
+fun <T> DbResult<T>.toEither(
 ): Either<Failure, T> {
     return toEither(
         {
             it
         },
         {
-            Failure.Error((this as DbResponse.Error).exception)
+            Failure.DbError((this as DbResult.Error).exception)
         })
 }

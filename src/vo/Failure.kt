@@ -1,11 +1,9 @@
 package vo
 
-sealed class Failure(val msg: String, val exception: Throwable = Exception(msg)) : Exception(msg) {
+sealed class Failure(open val msg: String) : Exception(msg) {
 
-    object UnknownError : Failure("Unknown Exception")
-    class Error(e: Throwable) : Failure(e.localizedMessage, e)
-    class EmptyData(msg: String = "No Data") : Failure(msg)
-    class LoginError(msg: String) : Failure(msg)
+    data class Error(val e: Throwable) : Failure(e.localizedMessage)
+    data class DbError(val exception: Throwable): Failure(exception.localizedMessage)
     object TimeOutException : Failure("Timeout exceeded")
 }
 

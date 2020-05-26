@@ -7,13 +7,15 @@ import model.toUsers
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import vo.DbResult
+import vo.dbQuery
 
 interface UserDao {
 
-    suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResponse<Int>
-    suspend fun delete(id: Int): DbResponse<Unit?>
-    suspend fun getById(userId: Int): DbResponse<User?>
-    suspend fun getAll(): DbResponse<List<User>>
+    suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResult<Int>
+    suspend fun delete(id: Int): DbResult<Boolean>
+    suspend fun getById(userId: Int): DbResult<User?>
+    suspend fun getAll(): DbResult<List<User>>
 
 }
 
@@ -27,9 +29,9 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResponse<Int> {
+    override suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResult<Int> {
         return dbQuery {
-            UserTable.insert {  }
+            UserTable.insert { }
             UserEntity.new {
                 this.name = name
                 this.surname = surname
@@ -39,17 +41,17 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun delete(id: Int): DbResponse<Unit?> {
+    override suspend fun delete(id: Int): DbResult<Boolean> {
         return dbQuery {
-            UserEntity.findById(id)?.delete()
+            UserEntity.findById(id)?.delete() != null
         }
     }
 
-    override suspend fun getById(userId: Int): DbResponse<User?> {
+    override suspend fun getById(userId: Int): DbResult<User?> {
         return dbQuery { UserEntity.findById(userId)?.toUser() }
     }
 
-    override suspend fun getAll(): DbResponse<List<User>> {
+    override suspend fun getAll(): DbResult<List<User>> {
         return dbQuery { UserEntity.all().toList().toUsers() }
     }
 

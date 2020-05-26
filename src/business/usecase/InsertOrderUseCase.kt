@@ -4,7 +4,7 @@ import data.repository.AppRepository
 import vo.Either
 import vo.Failure
 
-class InserOrderUseCase(private val repository: AppRepository): UseCase<InserOrderUseCase.Param, Int>(){
+class InsertOrderUseCase(private val repository: AppRepository): UseCase<InsertOrderUseCase.Param, Int>(){
 
     data class Param(val filmId: Int, val userId: Int)
 

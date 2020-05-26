@@ -29,7 +29,7 @@ abstract class UseCase<P, R> : BaseUseCase<P, R>() {
                         })
                 }
             }
-            cont.invokeOnCancellation { println("TimeOutException -> cancel Job")}
+            cont.invokeOnCancellation { println("Job Cancelled")}
         }
 
         resource?.let { sendBlocking(it)} ?: sendBlocking(Resource.Error(Failure.TimeOutException))
@@ -42,7 +42,7 @@ abstract class UseCase<P, R> : BaseUseCase<P, R>() {
 abstract class BaseUseCase<in P, out R> {
 
     operator fun invoke(param: P?, timeout: Long): Flow<Resource<R>> {
-        return start(param, timeout).onStart { emit(Resource.Loading()) }.flowOn(Dispatchers.Default)
+        return start(param, timeout).flowOn(Dispatchers.Default)
     }
 
     protected abstract suspend fun exec(param: P?, onResult: (Either<Failure, R>) -> Unit)
@@ -54,6 +54,6 @@ abstract class BaseUseCase<in P, out R> {
 fun <P, R> exec(
     useCase: BaseUseCase<P, R>,
     param: P? = null,
-    timeout: Long = 10000
+    timeout: Long = 60000
 
 ) = useCase(param, timeout)

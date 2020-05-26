@@ -5,13 +5,15 @@ import model.Order
 import model.toOrders
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import vo.DbResult
+import vo.dbQuery
 import java.time.LocalDateTime
 
 interface OrderDao{
-    suspend fun insert(userId: Int, filmId: Int): DbResponse<Int>
-    suspend fun getOrdersByUser(userId: Int): DbResponse<List<Order>>
-    suspend fun getOrdersByFilm(filmId : Int): DbResponse<List<Order>>
-    suspend fun delete(orderId: Int): DbResponse<Unit?>
+    suspend fun insert(userId: Int, filmId: Int): DbResult<Int>
+    suspend fun getOrdersByUser(userId: Int): DbResult<List<Order>>
+    suspend fun getOrdersByFilm(filmId : Int): DbResult<List<Order>>
+    suspend fun delete(orderId: Int): DbResult<Boolean>
 }
 
 
@@ -21,7 +23,7 @@ class OrderDaoImpl : OrderDao{
         transaction { SchemaUtils.create(OrderTable) }
     }
 
-    override suspend fun insert(userId: Int, filmId: Int): DbResponse<Int> {
+    override suspend fun insert(userId: Int, filmId: Int): DbResult<Int> {
         return dbQuery {
             OrderEntity.new {
                 this.date = LocalDateTime.now()
@@ -32,7 +34,7 @@ class OrderDaoImpl : OrderDao{
         }
     }
 
-    override suspend fun getOrdersByUser(userId: Int): DbResponse<List<Order>> {
+    override suspend fun getOrdersByUser(userId: Int): DbResult<List<Order>> {
         return dbQuery {
 //            val result = FilmTable.innerJoin(OrderTable).select { OrderTable.client eq user.id }.map { it[OrderTable.date] }
 //            val query = FilmTable.innerJoin(OrderTable).select { OrderTable.client eq user.id }
@@ -42,15 +44,15 @@ class OrderDaoImpl : OrderDao{
 
     }
 
-    override suspend fun getOrdersByFilm(filmId: Int): DbResponse<List<Order>> {
+    override suspend fun getOrdersByFilm(filmId: Int): DbResult<List<Order>> {
         return dbQuery {
             FilmEntity[filmId].orders.toList().toOrders()
         }
     }
 
-    override suspend fun delete(orderId: Int): DbResponse<Unit?> {
-       return  dbQuery {
-            OrderEntity.findById(orderId)?.delete()
-        }
+    override suspend fun delete(orderId: Int): DbResult<Boolean> {
+       return dbQuery {
+           OrderEntity.findById(orderId)?.delete() != null
+       }
     }
 }

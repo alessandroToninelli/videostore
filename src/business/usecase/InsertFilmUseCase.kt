@@ -1,14 +1,15 @@
 package business.usecase
 
 import data.repository.AppRepository
-import vo.Either
-import vo.Failure
+import vo.*
 
-class InsertFilmUseCase(private val repo: AppRepository): UseCase<InsertFilmUseCase.Param, Int>(){
+class InsertFilmUseCase(private val repo: AppRepository): UseCase<InsertFilmUseCase.Param, BoolResult>(){
 
-    override suspend fun exec(param: Param?, onResult: (Either<Failure, Int>) -> Unit) {
+    override suspend fun exec(param: Param?, onResult: (Either<Failure, BoolResult>) -> Unit) {
         param?.let {
-            onResult(repo.insertFilm(it.title, it.director, it.durationTimeMillis))
+            val result  = repo.insertFilm(it.title, it.director, it.durationTimeMillis).mapRight { BoolResult(Status.SUCCESS) }
+            onResult(result)
+
         }
     }
 

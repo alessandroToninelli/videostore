@@ -7,6 +7,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.time.withTimeout
 import org.koin.ktor.ext.koin
 import util.suspendCoroutineWithTimeout
+import vo.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -25,31 +26,6 @@ fun main(args: Array<String>) {
 
 
 fun Application.mainModule() {
-
-
-    launch{
-//        val a = suspendCoroutineWithTimeout<Int>(4000) {cont->
-//            launch {
-//                delay(20000)
-//                cont.resume(3)
-//            }.invokeOnCompletion { println("completato") }
-//
-//
-////            cont.invokeOnCancellation { println("timeOut");cont.resumeWithException(it!!); job.cancel() }
-//        }
-
-//        val a = withTimeoutOrNull(2000){
-//            delay(20000)
-//            2
-//        }
-//
-//
-//
-//        println("prima di a")
-//        println(a)
-//        println("dopo di a")
-    }
-
 
     koin {
         ModuleManager.loadModules()
