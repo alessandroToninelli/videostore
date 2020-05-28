@@ -46,6 +46,7 @@ class UserRouteTest{
     fun getUserById() = withTestApplication(Application::mainModule) {
         insertUser("alessandro", "toninelli", "myEmail")
         val request = handleRequest(HttpMethod.Get, "/user?id=1")
+        println(request.response.content)
         assertEquals(HttpStatusCode.OK, request.response.status())
         val user = request.response.content?.fromJson<User>()
         assertEquals("alessandro", user?.name)

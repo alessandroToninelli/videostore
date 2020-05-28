@@ -14,6 +14,8 @@ class ErrorResponse(val errType: Type, val message: String) {
         INVALID_SURNAME,
         INVALID_USER_TYPE,
         INVALID_EMAIL,
+        INVALID_USER_ID,
+        INVALID_FILM_ID,
         DB_ERROR,
         ERROR,
         TIMEOUT

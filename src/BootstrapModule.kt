@@ -1,7 +1,7 @@
 import io.ktor.application.*
 import org.jetbrains.exposed.sql.Database
 import org.koin.ktor.ext.inject
-import presentation.module.routingModule
+import presentation.routingModule
 import javax.sql.DataSource
 
 fun Application.bootstrapModule() {

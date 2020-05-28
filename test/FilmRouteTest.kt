@@ -6,7 +6,6 @@ import data.db.OrderTable
 import io.ktor.application.Application
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import jdk.jshell.Snippet
 import mainModule
 import model.Film
 import org.jetbrains.exposed.sql.SchemaUtils

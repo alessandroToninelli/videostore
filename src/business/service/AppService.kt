@@ -23,7 +23,8 @@ class AppService (
     private val getUserUseCase: GetUserUseCase,
     private val insertUserUseCase: InsertUserUseCase,
     private val insertOrderUseCase: InsertOrderUseCase,
-    private val insertFilmUseCase: InsertFilmUseCase
+    private val insertFilmUseCase: InsertFilmUseCase,
+    private val getOrderUseCase: GetOrderUseCase
 ){
 
     fun deleteFilm(id: Int): Flow<Resource<BoolResult>>{
@@ -74,8 +75,12 @@ class AppService (
         return exec(insertFilmUseCase, InsertFilmUseCase.Param(title, director, durationTimeMillis))
     }
 
-    fun insertNewOrder(filmId: Int, userId: Int): Flow<Resource<Int>>{
+    fun insertNewOrder(filmId: Int, userId: Int): Flow<Resource<BoolResult>>{
         return exec(insertOrderUseCase, InsertOrderUseCase.Param(filmId, userId))
+    }
+
+    fun getSingleOrder(orderId: Int): Flow<Resource<Order?>>{
+        return exec(getOrderUseCase, orderId)
     }
 
 }

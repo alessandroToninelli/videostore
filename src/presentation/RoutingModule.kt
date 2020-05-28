@@ -1,4 +1,4 @@
-package presentation.module
+package presentation
 
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation

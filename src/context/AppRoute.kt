@@ -20,3 +20,14 @@ class UserListRoute(val type: String)
 
 
 //orer route
+@Location("/order")
+data class OrderRoute(val id: Int? = null)
+
+@Location("/orders")
+class OrderListRoute {
+    @Location("/user")
+    data class User(val parent: OrderListRoute, val id: Int? = null)
+
+    @Location("/film")
+    data class Film(val parent: OrderListRoute, val id: Int? = null)
+}

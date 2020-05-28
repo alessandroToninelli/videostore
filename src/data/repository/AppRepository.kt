@@ -1,11 +1,7 @@
 package data.repository
 
 import data.db.*
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.supervisorScope
 import model.*
-import util.nullIfEmpty
 import vo.*
 import javax.sql.DataSource
 
@@ -35,6 +31,8 @@ interface AppRepository {
     suspend fun getOrderByUser(userId: Int): Either<Failure, List<Order>>
 
     suspend fun getOrderByFilm(filmId: Int): Either<Failure, List<Order>>
+
+    suspend fun getOrderById(orderId: Int): Either<Failure, Order?>
 
     suspend fun deleteOrder(orderId: Int): Either<Failure, Boolean>
 
@@ -94,6 +92,10 @@ class AppRepositoryImpl(
 
     override suspend fun getOrderByFilm(filmId: Int): Either<Failure, List<Order>> {
         return orderDao.getOrdersByFilm(filmId).toEither()
+    }
+
+    override suspend fun getOrderById(orderId: Int): Either<Failure, Order?> {
+        return orderDao.getOrderById(orderId).toEither()
     }
 
     override suspend fun deleteOrder(orderId: Int): Either<Failure, Boolean> {

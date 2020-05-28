@@ -1,4 +1,4 @@
-package presentation.module
+package presentation
 
 import business.service.AppService
 import context.FilmListRoute
