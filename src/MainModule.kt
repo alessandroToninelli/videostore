@@ -19,11 +19,7 @@ fun main(args: Array<String>) {
     val server = embeddedServer(Netty, commandLineEnvironment(args))
 
     server.start()
-
-
 }
-
-
 
 fun Application.mainModule() {
 
@@ -32,10 +28,4 @@ fun Application.mainModule() {
     }
 
     bootstrapModule()
-}
-
-
-
-suspend fun exec(){
-
 }

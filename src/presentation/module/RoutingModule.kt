@@ -1,6 +1,5 @@
 package presentation.module
 
-import business.service.AppService
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
@@ -10,17 +9,21 @@ import io.ktor.locations.Locations
 import io.ktor.request.host
 import io.ktor.request.uri
 import io.ktor.response.respond
-import io.ktor.routing.get
 import io.ktor.routing.routing
-import kotlinx.coroutines.flow.collect
-import org.koin.ktor.ext.inject
-import vo.Failure
+import vo.ErrorResponse
+import vo.doErrorResponse
 
 fun Application.routingModule() {
 
     install(StatusPages) {
         status(HttpStatusCode.NotFound) {
             call.respond(HttpStatusCode.NotFound)
+        }
+
+        exception<IllegalArgumentException> {
+            it.message?.let {typeError ->
+                call.respond(HttpStatusCode.BadRequest, doErrorResponse(ErrorResponse.Type.valueOf(typeError)))
+            }
         }
     }
 

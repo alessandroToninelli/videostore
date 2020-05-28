@@ -26,15 +26,15 @@ class AppService (
     private val insertFilmUseCase: InsertFilmUseCase
 ){
 
-    fun deleteFilm(id: Int): Flow<Resource<Boolean>>{
+    fun deleteFilm(id: Int): Flow<Resource<BoolResult>>{
         return exec(deleteFilmUseCase, id)
     }
 
-    fun deleteOrder(id: Int): Flow<Resource<Boolean>>{
+    fun deleteOrder(id: Int): Flow<Resource<BoolResult>>{
         return exec(deleteOrderUseCase, id)
     }
 
-    fun deleteUser(id: Int): Flow<Resource<Boolean>>{
+    fun deleteUser(id: Int): Flow<Resource<BoolResult>>{
         return exec(deleteUserUseCase, id)
     }
 
@@ -66,7 +66,7 @@ class AppService (
         return exec(getUserUseCase, id)
     }
 
-    fun insertNewUser(name: String, surname: String, email: String, type: UserType): Flow<Resource<Int>>{
+    fun insertNewUser(name: String, surname: String, email: String, type: UserType): Flow<Resource<BoolResult>>{
         return exec(insertUserUseCase, InsertUserUseCase.Param(name, surname, email, type))
     }
 

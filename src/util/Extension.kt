@@ -1,18 +1,13 @@
 package util
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import io.ktor.application.ApplicationCall
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.TextContent
-import io.ktor.response.defaultTextContentType
 import io.ktor.response.respond
 import kotlinx.coroutines.*
 import vo.*
-
-fun <T> List<T>.nullIfEmpty(): List<T>? {
-    return this.ifEmpty { null }
-}
 
 suspend inline fun <T> suspendCoroutineWithTimeout(
     timeout: Long,
@@ -20,6 +15,10 @@ suspend inline fun <T> suspendCoroutineWithTimeout(
 ) = withTimeoutOrNull(timeout) {
     suspendCancellableCoroutine(block = block)
 }
+
+
+inline fun <reified T> String.fromJson(): T = Gson().fromJson(this, object : TypeToken<T>(){}.type)
+
 
 suspend fun <T> ApplicationCall.respondResource(resource: Resource<T>, errorStatus: HttpStatusCode = HttpStatusCode.InternalServerError) {
     resource.case(

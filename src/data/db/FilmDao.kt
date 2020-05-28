@@ -21,6 +21,7 @@ class FilmDaoImpl() : FilmDao {
 
     init {
         transaction { SchemaUtils.create(FilmTable) }
+
     }
 
     override suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResult<Int> {

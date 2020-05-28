@@ -31,7 +31,6 @@ class UserDaoImpl : UserDao {
 
     override suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResult<Int> {
         return dbQuery {
-            UserTable.insert { }
             UserEntity.new {
                 this.name = name
                 this.surname = surname
