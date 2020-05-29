@@ -47,6 +47,7 @@ object ModuleManager : KoinComponent {
         single<InsertOrderUseCase>()
         single<InsertFilmUseCase>()
         single<InsertUserUseCase>()
+        single<GetOrderUseCase>()
     }
 
     private val serviceModule = module {

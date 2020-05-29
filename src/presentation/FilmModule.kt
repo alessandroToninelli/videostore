@@ -40,7 +40,6 @@ fun Route.filmModule() {
         val durationTimeMillis = requireNotNull(param["duration"]?.toLong()){Type.INVALID_DURATION}
 
 
-
         service.insertNewFilm(title, director, durationTimeMillis).collect {
             call.respondResource(it)
         }

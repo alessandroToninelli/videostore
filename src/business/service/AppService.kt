@@ -67,15 +67,15 @@ class AppService (
         return exec(getUserUseCase, id)
     }
 
-    fun insertNewUser(name: String, surname: String, email: String, type: UserType): Flow<Resource<BoolResult>>{
+    fun insertNewUser(name: String, surname: String, email: String, type: UserType): Flow<Resource<Int>>{
         return exec(insertUserUseCase, InsertUserUseCase.Param(name, surname, email, type))
     }
 
-    fun insertNewFilm(title: String, director: String, durationTimeMillis: Long): Flow<Resource<BoolResult>>{
+    fun insertNewFilm(title: String, director: String, durationTimeMillis: Long): Flow<Resource<Int>>{
         return exec(insertFilmUseCase, InsertFilmUseCase.Param(title, director, durationTimeMillis))
     }
 
-    fun insertNewOrder(filmId: Int, userId: Int): Flow<Resource<BoolResult>>{
+    fun insertNewOrder(filmId: Int, userId: Int): Flow<Resource<Int>>{
         return exec(insertOrderUseCase, InsertOrderUseCase.Param(filmId, userId))
     }
 

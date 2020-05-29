@@ -32,8 +32,9 @@ class UserRouteTest{
     fun insertUserTest() = withTestApplication(Application::mainModule){
         val request = insertUser("alessandro", "toninelli", "myEmail")
         assertEquals(HttpStatusCode.OK, request.response.status())
-        val boolResult = request.response.content?.fromJson<BoolResult>()
-        assertEquals(Status.SUCCESS, boolResult?.status)
+        val result = request.response.content?.toInt()
+        assertEquals(HttpStatusCode.OK, request.response.status())
+        assertEquals(true, result is Int)
     }
 
     @Test
@@ -65,7 +66,6 @@ class UserRouteTest{
     fun getAdminUserList() = withTestApplication(Application::mainModule) {
         insertUser("alessandro", "toninelli", "myEmail")
         val request = handleRequest(HttpMethod.Get, "/users?type=a")
-        println(request.response.content)
         assertEquals(HttpStatusCode.OK, request.response.status())
         val list = request.response.content?.fromJson<List<User>>()
         assertEquals(1, list?.size)

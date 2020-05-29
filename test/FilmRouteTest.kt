@@ -36,8 +36,9 @@ class FilmRouteTest {
         withTestApplication(Application::mainModule) {
             val request = insertFilm("titolo", "direttore", 400000)
             assertEquals(HttpStatusCode.OK, request.response.status())
-            val boolResult = request.response.content?.fromJson<BoolResult>()
-            assertEquals(Status.SUCCESS, boolResult?.status)
+            val result = request.response.content?.toInt()
+            assertEquals(HttpStatusCode.OK, request.response.status())
+            assertEquals(true, result is Int)
         }
     }
 
