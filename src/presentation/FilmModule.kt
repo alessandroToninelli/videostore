@@ -26,7 +26,7 @@ fun Route.filmModule() {
     }
 
     get<FilmRoute> {
-        val id = requireNotNull(it.id){Type.INVALID_ID}
+        val id = requireNotNull(it.id?.toInt()){Type.INVALID_ID}
         service.getSingleFilm(id).collect {
             call.respondResource(it)
         }
@@ -39,14 +39,13 @@ fun Route.filmModule() {
         val director = requireNotNull(param["director"]){Type.INVALID_DIRECTOR}
         val durationTimeMillis = requireNotNull(param["duration"]?.toLong()){Type.INVALID_DURATION}
 
-
         service.insertNewFilm(title, director, durationTimeMillis).collect {
             call.respondResource(it)
         }
     }
 
     delete<FilmRoute> {
-        val id = requireNotNull(it.id){Type.INVALID_ID}
+        val id = requireNotNull(it.id?.toInt()){Type.INVALID_ID}
         service.deleteFilm(id).collect {
             call.respondResource(it)
         }

@@ -22,8 +22,8 @@ inline fun <reified T> String.fromJson(): T = Gson().fromJson(this, object : Typ
 
 suspend fun <T> ApplicationCall.respondResource(resource: Resource<T>, errorStatus: HttpStatusCode = HttpStatusCode.InternalServerError) {
     resource.case(
-        success = {
-            respond(HttpStatusCode.OK, it.data ?: "null")
+        success = {res ->
+            res.data?.let { respond(HttpStatusCode.OK, it as Any) } ?: respond(HttpStatusCode.NoContent, "null")
         },
         error = {
             respond(errorStatus, it.failure.toErrorResponse())
