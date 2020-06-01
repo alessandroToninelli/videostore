@@ -7,6 +7,7 @@ import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import kotlinx.coroutines.*
+import mu.KotlinLogging
 import vo.*
 
 suspend inline fun <T> suspendCoroutineWithTimeout(
@@ -16,6 +17,7 @@ suspend inline fun <T> suspendCoroutineWithTimeout(
     suspendCancellableCoroutine(block = block)
 }
 
+val klog = KotlinLogging.logger("Logger")
 
 inline fun <reified T> String.fromJson(): T = Gson().fromJson(this, object : TypeToken<T>(){}.type)
 

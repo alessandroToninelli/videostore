@@ -1,21 +1,20 @@
 package vo
 
-import javax.xml.transform.ErrorListener
-
-
 class ErrorResponse(val errType: Type, val message: String) {
 
     enum class Type {
-        INVALID_TITLE,
-        INVALID_DIRECTOR,
-        INVALID_DURATION,
-        INVALID_ID,
-        INVALID_NAME,
-        INVALID_SURNAME,
-        INVALID_USER_TYPE,
-        INVALID_EMAIL,
-        INVALID_USER_ID,
-        INVALID_FILM_ID,
+        MISSING_TITLE,
+        MISSING_DIRECTOR,
+        MISSING_DURATION,
+        MISSING_ID,
+        MISSING_NAME,
+        MISSING_SURNAME,
+        MISSING_USER_TYPE,
+        MISSING_EMAIL,
+        MISSING_USER_ID,
+        MISSING_FILM_ID,
+        INVALID_NUMBER,
+        INVALID_PARAM,
         DB_ERROR,
         ERROR,
         TIMEOUT

@@ -1,6 +1,5 @@
 package com.example
 
-import com.zaxxer.hikari.HikariDataSource
 import data.db.FilmTable
 import data.db.OrderTable
 import io.ktor.application.Application
@@ -10,15 +9,12 @@ import mainModule
 import model.Film
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.transactions.transactionScope
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
-import org.koin.ktor.ext.get
 import util.fromJson
 import vo.BoolResult
+import vo.ErrorResponse
 import vo.Status
-import javax.sql.DataSource
 import kotlin.test.assertEquals
 
 class FilmRouteTest {
@@ -64,11 +60,41 @@ class FilmRouteTest {
     @Test
     fun testGetFilmById() {
         withTestApplication(Application::mainModule) {
-            insertFilm("bubba", "direttore", 3)
+            insertFilm("film", "direttore", 3)
             val request = handleRequest(HttpMethod.Get, "/film?id=1")
             assertEquals(HttpStatusCode.OK, request.response.status())
             assertEquals(1, request.response.content?.fromJson<Film>()?.id)
             assertEquals("bubba", request.response.content?.fromJson<Film>()?.title)
+        }
+    }
+
+    @Test
+    fun testGetFilmByIdFailInvalidParam() {
+        withTestApplication(Application::mainModule) {
+            insertFilm("film", "direttore", 3)
+            val request = handleRequest(HttpMethod.Get, "/film?id=a")
+            assertEquals(HttpStatusCode.BadRequest, request.response.status())
+            assertEquals(ErrorResponse.Type.INVALID_PARAM, request.response.content?.fromJson<ErrorResponse>()?.errType)
+        }
+    }
+
+    @Test
+    fun testGetFilmByIdFailNoId() {
+        withTestApplication(Application::mainModule) {
+            insertFilm("film", "direttore", 3)
+            val request = handleRequest(HttpMethod.Get, "/film?id=9999999")
+            println(request.response.content)
+            assertEquals(HttpStatusCode.NoContent, request.response.status())
+        }
+    }
+
+    @Test
+    fun testGetFilmByIdFailMissingParam() {
+        withTestApplication(Application::mainModule) {
+            insertFilm("film", "direttore", 3)
+            val request = handleRequest(HttpMethod.Get, "/film")
+            assertEquals(HttpStatusCode.BadRequest, request.response.status())
+            assertEquals(ErrorResponse.Type.MISSING_ID, request.response.content?.fromJson<ErrorResponse>()?.errType)
         }
     }
 

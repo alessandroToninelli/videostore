@@ -56,6 +56,9 @@ dependencies {
     //di
     implementation("org.koin:koin-ktor:2.1.5")
 
+    //logger
+    implementation("io.github.microutils:kotlin-logging:1.7.9")
+
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.6")

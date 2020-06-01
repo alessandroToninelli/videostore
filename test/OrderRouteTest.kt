@@ -8,14 +8,13 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import mainModule
 import model.Order
-import model.User
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import util.fromJson
 import vo.BoolResult
+import vo.ErrorResponse
 import vo.Status
 import kotlin.test.assertEquals
 
@@ -57,6 +56,29 @@ class OrderRouteTest {
         val order = request.response.content?.fromJson<Order>()
         assertEquals(filmId?.toInt(), order?.film?.id)
         assertEquals(userId?.toInt(), order?.user?.id)
+    }
+
+
+    @Test
+    fun testGetOrderByIdInvalidParam() = withTestApplication(Application::mainModule) {
+        val filmId = insertFilm("Star Wars", "nolan", 30000).response.content
+        val userId = insertUser("Alessando", "toninelli", "MyEmail").response.content
+        val orderId = insertOrder(filmId, userId).response.content
+        val request = handleRequest(HttpMethod.Get, "/order?id=a")
+        assertEquals(HttpStatusCode.BadRequest, request.response.status())
+        val error = request.response.content?.fromJson<ErrorResponse>()
+        assertEquals(ErrorResponse.Type.INVALID_PARAM, error?.errType)
+    }
+
+    @Test
+    fun testGetOrderByIdMissingParam() = withTestApplication(Application::mainModule) {
+        val filmId = insertFilm("Star Wars", "nolan", 30000).response.content
+        val userId = insertUser("Alessando", "toninelli", "MyEmail").response.content
+        val orderId = insertOrder(filmId, userId).response.content
+        val request = handleRequest(HttpMethod.Get, "/order")
+        assertEquals(HttpStatusCode.BadRequest, request.response.status())
+        val error = request.response.content?.fromJson<ErrorResponse>()
+        assertEquals(ErrorResponse.Type.MISSING_ID, error?.errType)
     }
 
     @Test

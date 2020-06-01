@@ -11,10 +11,10 @@ import model.UserType
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import util.fromJson
 import vo.BoolResult
+import vo.ErrorResponse
 import vo.Status
 import kotlin.test.assertEquals
 
@@ -51,6 +51,24 @@ class UserRouteTest{
         assertEquals(HttpStatusCode.OK, request.response.status())
         val user = request.response.content?.fromJson<User>()
         assertEquals("alessandro", user?.name)
+    }
+
+    @Test
+    fun getUserByIdFailInvalidParam() = withTestApplication(Application::mainModule) {
+        insertUser("alessandro", "toninelli", "myEmail")
+        val request = handleRequest(HttpMethod.Get, "/user?id=a")
+        assertEquals(HttpStatusCode.BadRequest, request.response.status())
+        val error = request.response.content?.fromJson<ErrorResponse>()
+        assertEquals(ErrorResponse.Type.INVALID_PARAM, error?.errType)
+    }
+
+    @Test
+    fun getUserByIdFailMissingParam() = withTestApplication(Application::mainModule) {
+        insertUser("alessandro", "toninelli", "myEmail")
+        val request = handleRequest(HttpMethod.Get, "/user")
+        assertEquals(HttpStatusCode.BadRequest, request.response.status())
+        val error = request.response.content?.fromJson<ErrorResponse>()
+        assertEquals(ErrorResponse.Type.MISSING_ID, error?.errType)
     }
 
     @Test

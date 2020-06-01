@@ -7,7 +7,7 @@ class DeleteUserUseCase(private val repo: AppRepository) : UseCase<Int, BoolResu
     override suspend fun exec(param: Int?, onResult: (Either<Failure, BoolResult>) -> Unit) {
         param?.let {
             onResult(
-                repo.deleteUser(it).mapRight { it.toBoolResult(doErrorResponse(ErrorResponse.Type.INVALID_ID)) })
+                repo.deleteUser(it).mapRight { it.toBoolResult(doErrorResponse(ErrorResponse.Type.MISSING_ID)) })
         }
     }
 

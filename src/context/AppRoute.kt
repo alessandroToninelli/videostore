@@ -5,7 +5,7 @@ import io.ktor.locations.Location
 //film routes
 
 @Location("/film")
-data class FilmRoute(val id: String? = null)
+data class FilmRoute(val id: Int? = null)
 
 @Location("/films")
 class FilmListRoute()

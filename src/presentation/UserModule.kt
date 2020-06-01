@@ -9,7 +9,6 @@ import io.ktor.locations.get
 import io.ktor.locations.post
 import io.ktor.request.receiveParameters
 import io.ktor.routing.Route
-import io.ktor.routing.post
 import kotlinx.coroutines.flow.collect
 import model.UserType
 import org.koin.ktor.ext.inject
@@ -24,30 +23,30 @@ fun Route.userModule(){
 
         val param = call.receiveParameters()
 
-        val name = requireNotNull(param["name"]){ ErrorResponse.Type.INVALID_NAME}
-        val surname = requireNotNull(param["surname"]){ ErrorResponse.Type.INVALID_SURNAME}
-        val email = requireNotNull(param["email"]){ ErrorResponse.Type.INVALID_EMAIL}
+        val name = requireNotNull(param["name"]){ ErrorResponse.Type.MISSING_NAME}
+        val surname = requireNotNull(param["surname"]){ ErrorResponse.Type.MISSING_SURNAME}
+        val email = requireNotNull(param["email"]){ ErrorResponse.Type.MISSING_EMAIL}
 
         println(" $name $surname $email")
         service.insertNewUser(name, surname, email, UserType.ADMIN).collect { call.respondResource(it) }
     }
 
     get<UserRoute>{
-        val id = requireNotNull(it.id){ ErrorResponse.Type.INVALID_ID }
+        val id = requireNotNull(it.id){ ErrorResponse.Type.MISSING_ID }
         service.getSingleUser(id).collect { call.respondResource(it) }
     }
 
     get<UserListRoute>{
-        val type = requireNotNull(it.type){ErrorResponse.Type.INVALID_USER_TYPE}
+        val type = requireNotNull(it.type){ErrorResponse.Type.MISSING_USER_TYPE}
         when(type){
             "u" -> service.getUserList()
             "a" -> service.getAdminUsers()
-            else -> throw IllegalArgumentException(ErrorResponse.Type.INVALID_USER_TYPE.toString())
+            else -> throw IllegalArgumentException(ErrorResponse.Type.MISSING_USER_TYPE.toString())
         }.collect { call.respondResource(it) }
     }
 
     delete<UserRoute>{
-        val id = requireNotNull(it.id){ErrorResponse.Type.INVALID_ID}
+        val id = requireNotNull(it.id){ErrorResponse.Type.MISSING_ID}
         service.deleteUser(id).collect { call.respondResource(it) }
     }
 
