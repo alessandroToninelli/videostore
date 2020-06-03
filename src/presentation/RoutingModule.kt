@@ -1,5 +1,6 @@
 package presentation
 
+import bootstrapModule
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.ParameterConversionException
@@ -54,6 +55,8 @@ fun Application.routingModule() {
 
 
     routing {
+
+        loginModule()
 
         filmModule()
 
