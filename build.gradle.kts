@@ -37,8 +37,6 @@ dependencies {
     implementation("io.ktor:ktor-auth-ldap:$ktor_version")
     implementation("io.ktor:ktor-gson:$ktor_version")
     implementation("io.ktor:ktor-locations:$ktor_version")
-    implementation("io.ktor:ktor-sessions:$ktor_version")
-
     //exposed
     implementation("org.jetbrains.exposed:exposed-core:0.24.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.24.1")

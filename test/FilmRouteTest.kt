@@ -83,7 +83,7 @@ class FilmRouteTest {
         withTestApplication(Application::mainModule) {
             insertFilm("film", "direttore", 3)
             val request = handleRequest(HttpMethod.Get, "/film?id=9999999")
-            println(request.response.content)
+            assertEquals("null", request.response.content)
             assertEquals(HttpStatusCode.NoContent, request.response.status())
         }
     }
