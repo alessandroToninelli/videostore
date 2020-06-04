@@ -21,9 +21,6 @@ import java.lang.NumberFormatException
 fun Application.routingModule() {
 
     install(StatusPages) {
-        status(HttpStatusCode.NotFound) {
-            call.respond(HttpStatusCode.NotFound)
-        }
 
         exception<IllegalArgumentException> {
             klog.error { it.localizedMessage }
