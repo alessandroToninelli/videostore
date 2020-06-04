@@ -12,6 +12,7 @@ import io.ktor.request.host
 import io.ktor.request.uri
 import io.ktor.response.respond
 import io.ktor.routing.routing
+import io.ktor.sessions.Sessions
 import util.klog
 import vo.ErrorResponse
 import vo.doErrorResponse
@@ -55,8 +56,6 @@ fun Application.routingModule() {
 
 
     routing {
-
-        loginModule()
 
         filmModule()
 

@@ -25,7 +25,7 @@ fun Route.filmModule() {
     get<FilmRoute> {
         val id = requireNotNull(it.id){Type.MISSING_ID}
         service.getSingleFilm(id).collect {
-            println(it)
+
             call.respondResource(it)
         }
     }
