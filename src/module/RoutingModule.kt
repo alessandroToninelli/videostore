@@ -33,7 +33,6 @@ class RoutingModule(private val webRoutes: List<WebRoute>): AppModule{
             }
 
             routing {
-
                 webRoutes.onEach { it.makeRoute(this) }
             }
         }

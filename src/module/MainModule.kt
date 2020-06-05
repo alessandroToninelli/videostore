@@ -24,5 +24,4 @@ fun Application.mainModule() {
 
     getKoin().getAll<AppModule>().onEach { it.install(this) }
 
-
 }

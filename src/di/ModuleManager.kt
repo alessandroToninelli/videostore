@@ -62,7 +62,6 @@ object ModuleManager : KoinComponent {
         single<InsertFilmUseCase>()
         single<InsertUserUseCase>()
         single<GetOrderUseCase>()
-
     }
 
     private val routeModule = module {
