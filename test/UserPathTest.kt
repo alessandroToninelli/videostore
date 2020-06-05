@@ -5,7 +5,7 @@ import data.db.UserTable
 import io.ktor.application.Application
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import mainModule
+import module.mainModule
 import model.User
 import model.UserType
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -18,7 +18,7 @@ import vo.ErrorResponse
 import vo.Status
 import kotlin.test.assertEquals
 
-class UserRouteTest{
+class UserPathTest{
 
     @After
     fun tearDown(){

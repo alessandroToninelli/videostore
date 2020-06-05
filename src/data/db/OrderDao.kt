@@ -21,10 +21,6 @@ interface OrderDao{
 
 class OrderDaoImpl : OrderDao{
 
-    init {
-        transaction { SchemaUtils.create(OrderTable) }
-    }
-
     override suspend fun insert(userId: Int, filmId: Int): DbResult<Int> {
         return dbQuery {
             OrderEntity.new {

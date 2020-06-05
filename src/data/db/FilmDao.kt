@@ -17,12 +17,7 @@ interface FilmDao {
 
 }
 
-class FilmDaoImpl() : FilmDao {
-
-    init {
-        transaction { SchemaUtils.create(FilmTable) }
-
-    }
+class FilmDaoImpl : FilmDao {
 
     override suspend fun insert(title: String, director: String, durationTimeMillis: Long): DbResult<Int> {
         return dbQuery {

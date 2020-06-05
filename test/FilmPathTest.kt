@@ -5,7 +5,7 @@ import data.db.OrderTable
 import io.ktor.application.Application
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import mainModule
+import module.mainModule
 import model.Film
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -17,7 +17,7 @@ import vo.ErrorResponse
 import vo.Status
 import kotlin.test.assertEquals
 
-class FilmRouteTest {
+class FilmPathTest {
 
     @After
     fun tearDown(){
@@ -64,7 +64,7 @@ class FilmRouteTest {
             val request = handleRequest(HttpMethod.Get, "/film?id=1")
             assertEquals(HttpStatusCode.OK, request.response.status())
             assertEquals(1, request.response.content?.fromJson<Film>()?.id)
-            assertEquals("bubba", request.response.content?.fromJson<Film>()?.title)
+            assertEquals("film", request.response.content?.fromJson<Film>()?.title)
         }
     }
 

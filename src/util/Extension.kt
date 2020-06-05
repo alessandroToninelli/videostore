@@ -8,7 +8,9 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import kotlinx.coroutines.*
 import mu.KotlinLogging
+import org.koin.core.Koin
 import vo.*
+import kotlin.reflect.full.isSubclassOf
 
 suspend inline fun <T> suspendCoroutineWithTimeout(
     timeout: Long,
@@ -31,3 +33,10 @@ suspend fun <T> ApplicationCall.respondResource(resource: Resource<T>, errorStat
             respond(errorStatus, it.failure.toErrorResponse())
         })
 }
+
+
+//inline fun <reified T> Koin.getAllOfType(): Collection<T>{
+//
+////    val a = _scopeRegistry.rootScope._scopeDefinition.definitions.filter { it.primaryType.isSubclassOf(T::class) }
+//
+//}

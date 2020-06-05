@@ -22,13 +22,6 @@ interface UserDao {
 
 class UserDaoImpl : UserDao {
 
-    init {
-
-        transaction {
-            SchemaUtils.create(UserTable)
-        }
-    }
-
     override suspend fun insert(name: String, surname: String, email: String, type: UserType): DbResult<Int> {
         return dbQuery {
             UserEntity.new {

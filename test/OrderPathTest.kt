@@ -6,7 +6,7 @@ import data.db.UserTable
 import io.ktor.application.Application
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import mainModule
+import module.mainModule
 import model.Order
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -18,7 +18,7 @@ import vo.ErrorResponse
 import vo.Status
 import kotlin.test.assertEquals
 
-class OrderRouteTest {
+class OrderPathTest {
 
     @After
     fun tearDown(){

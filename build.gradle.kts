@@ -54,6 +54,9 @@ dependencies {
 
     //di
     implementation("org.koin:koin-ktor:2.1.5")
+    implementation("org.koin:koin-core:2.1.5")
+    implementation("org.koin:koin-core-ext:2.1.5")
+
 
     //logger
     implementation("io.github.microutils:kotlin-logging:1.7.9")
